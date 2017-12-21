@@ -97,8 +97,10 @@ func (p *Period) Normalize() *Period {
 	seconds := p.Seconds % 60
 	minutes := p.Seconds/60 + p.Minutes
 	minutes, hours := minutes%60, minutes/60+p.Hours
-	hours, days := hours%24, hours/24+p.Days+p.Weeks*7
-	months, years := p.Months%12, p.Months/12+p.Years
+	hours = hours % 24
+	d := hours/24 + p.Days + p.Weeks*7
+	days := d % 30
+	months, years := p.Months%12+d/30, p.Months/12+p.Years
 
 	return &Period{years, months, 0, days, hours, minutes, seconds}
 }
