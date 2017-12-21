@@ -2,18 +2,19 @@ package iso8601
 
 import (
 	"errors"
-	"github.com/jucardi/go-strings"
 	"fmt"
-	"strconv"
-	"unicode"
 	"github.com/jucardi/go-streams/streams"
+	"github.com/jucardi/go-strings"
+	"strconv"
 	"time"
+	"unicode"
 )
 
 var (
 	valueNotFound = "attempting to assign %s but no value found"
 	values        = []rune{'Y', 'M', 'W', 'D', 'H', 'M', 'S'}
 )
+
 // Interval represents the interval structure defined in the ISO8601
 type Period struct {
 	Years   int `json:"years" bson:"years"`

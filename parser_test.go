@@ -1,8 +1,8 @@
 package iso8601
 
 import (
-	"testing"
 	"github.com/stretchr/testify/assert"
+	"testing"
 	"time"
 )
 
