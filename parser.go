@@ -1,15 +1,21 @@
 package iso8601
 
 import (
+	"bytes"
 	"errors"
 	"fmt"
+	"html/template"
 	"strconv"
 	"strings"
 	"time"
 )
 
-// Info represents the information held by an ISO8601 expression
-type Info struct {
+const iso8601TemplateString = "{{if .Repeats}}R{{.Repeats}}/{{end}}{{if .Start}}{{.GetStartString}}/{{end}}{{if .Period}}{{.GetPeriodString}}/{{end}}{{if .End}}{{.GetEndString}}{{end}}"
+
+var iso8601Template, _ = template.New("iso8601").Parse(iso8601TemplateString)
+
+// IntervalDescriptor represents the information held by an ISO8601 expression
+type IntervalDescriptor struct {
 	Start   time.Time `json:"start" bson:"start"`
 	End     time.Time `json:"end" bson:"end"`
 	Repeats int       `json:"repeats" bson:"repeats"`
@@ -17,20 +23,12 @@ type Info struct {
 }
 
 // Parse Parses an ISO8601 expression
-func Parse(expression string) (*Info, error) {
+func Parse(expression string) (*IntervalDescriptor, error) {
 	split := strings.Split(expression, "/")
-
-	if len(split) == 1 {
-		t, err := time.Parse(time.RFC3339, expression)
-		return &Info{
-			Start: t,
-		}, err
-	}
-
 	endSet := false
 	repeatsSet := false
 	durationSet := false
-	ret := &Info{}
+	ret := &IntervalDescriptor{}
 
 	for i, v := range split {
 		if strings.HasPrefix(v, "R") {
@@ -84,5 +82,40 @@ func Parse(expression string) (*Info, error) {
 	}
 
 	return ret, nil
+}
 
+func (i *IntervalDescriptor) ToString() string {
+	buf := new(bytes.Buffer)
+	iso8601Template.Execute(buf, i)
+	str := buf.String()
+
+	if strings.HasPrefix(str, "/") {
+		str = str[1:]
+	}
+
+	if strings.HasSuffix(str, "/") {
+		str = str[:len(str)-1]
+	}
+
+	return strings.Replace(str, "//", "/", -1)
+}
+
+func (i *IntervalDescriptor) GetStartString() string {
+	zero := time.Time{}
+	if i.Start == zero {
+		return ""
+	}
+	return i.Start.Format(time.RFC3339)
+}
+
+func (i *IntervalDescriptor) GetEndString() string {
+	zero := time.Time{}
+	if i.End == zero {
+		return ""
+	}
+	return i.End.Format(time.RFC3339)
+}
+
+func (i *IntervalDescriptor) GetPeriodString() string {
+	return i.Period.ToString()
 }

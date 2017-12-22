@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-func TestFromString(t *testing.T) {
+func TestPeriod_FromString(t *testing.T) {
 	result, err := PeriodFromString("DT1S")
 	assert.Nil(t, result)
 	assert.NotNil(t, err)
@@ -74,7 +74,7 @@ func TestFromString(t *testing.T) {
 	assert.Equal(t, &Period{Years: 1, Months: 2, Days: 10, Hours: 2, Minutes: 30}, result)
 }
 
-func TestPeriodNormalize(t *testing.T) {
+func TestPeriod_Normalize(t *testing.T) {
 	period := Period{Years: 1, Months: 15, Weeks: 2, Days: 31, Hours: 27, Minutes: 73, Seconds: 91}
 	result := period.Normalize()
 
@@ -87,7 +87,7 @@ func TestPeriodNormalize(t *testing.T) {
 	assert.Equal(t, 2, result.Years)
 }
 
-func TestToDuration(t *testing.T) {
+func TestPeriod_ToDuration(t *testing.T) {
 	p := &Period{
 		Hours:   12,
 		Minutes: 30,
@@ -96,4 +96,33 @@ func TestToDuration(t *testing.T) {
 
 	d := time.Duration(12)*time.Hour + time.Duration(30)*time.Minute + time.Duration(20)*time.Second
 	assert.Equal(t, d, p.ToDuration())
+}
+
+func TestPeriod_ToString(t *testing.T) {
+	p := &Period{Years: 1, Months: 2, Days: 3, Hours: 4, Minutes: 5, Seconds: 6}
+	assert.Equal(t, "P1Y2M3DT4H5M6S", p.ToString())
+
+	p = &Period{Years: 0, Months: 2, Days: 3, Hours: 4, Minutes: 5, Seconds: 6}
+	assert.Equal(t, "P2M3DT4H5M6S", p.ToString())
+
+	p = &Period{Years: 1, Months: 0, Days: 3, Hours: 4, Minutes: 5, Seconds: 6}
+	assert.Equal(t, "P1Y3DT4H5M6S", p.ToString())
+
+	p = &Period{Years: 1, Months: 2, Days: 0, Hours: 4, Minutes: 5, Seconds: 6}
+	assert.Equal(t, "P1Y2MT4H5M6S", p.ToString())
+
+	p = &Period{Years: 1, Months: 2, Days: 3, Hours: 0, Minutes: 5, Seconds: 6}
+	assert.Equal(t, "P1Y2M3DT5M6S", p.ToString())
+
+	p = &Period{Years: 1, Months: 2, Days: 3, Hours: 4, Minutes: 0, Seconds: 6}
+	assert.Equal(t, "P1Y2M3DT4H6S", p.ToString())
+
+	p = &Period{Years: 1, Months: 2, Days: 3, Hours: 4, Minutes: 5, Seconds: 0}
+	assert.Equal(t, "P1Y2M3DT4H5M", p.ToString())
+
+	p = &Period{Years: 1, Months: 2, Days: 3, Hours: 0, Minutes: 0, Seconds: 0}
+	assert.Equal(t, "P1Y2M3D", p.ToString())
+
+	p = &Period{Years: 0, Months: 0, Days: 0, Hours: 4, Minutes: 5, Seconds: 6}
+	assert.Equal(t, "PT4H5M6S", p.ToString())
 }

@@ -69,3 +69,45 @@ func TestParseMultipleEndDates(t *testing.T) {
 	assert.Nil(t, result)
 	assert.Equal(t, "invalid iso8601, more than one end date detected", err.Error())
 }
+
+func TestToString(t *testing.T) {
+	isoStr := "R5/2008-03-01T13:00:00Z/P1Y2M10DT2H30M/2009-03-01T13:00:00Z"
+	result, _ := Parse(isoStr)
+	str := result.ToString()
+	assert.Equal(t, isoStr, str)
+
+	isoStr = "2008-03-01T13:00:00Z/P1Y2M10DT2H30M/2009-03-01T13:00:00Z"
+	result, _ = Parse(isoStr)
+	str = result.ToString()
+	assert.Equal(t, isoStr, str)
+
+	isoStr = "P1Y2M10DT2H30M/2009-03-01T13:00:00Z"
+	result, _ = Parse(isoStr)
+	str = result.ToString()
+	assert.Equal(t, isoStr, str)
+
+	isoStr = "R5/P1Y2M10DT2H30M/2009-03-01T13:00:00Z"
+	result, _ = Parse(isoStr)
+	str = result.ToString()
+	assert.Equal(t, isoStr, str)
+
+	isoStr = "2008-03-01T13:00:00Z/P1Y2M10DT2H30M"
+	result, _ = Parse(isoStr)
+	str = result.ToString()
+	assert.Equal(t, isoStr, str)
+
+	isoStr = "R5/2008-03-01T13:00:00Z/P1Y2M10DT2H30M"
+	result, _ = Parse(isoStr)
+	str = result.ToString()
+	assert.Equal(t, isoStr, str)
+
+	isoStr = "2009-03-01T13:00:00Z"
+	result, _ = Parse(isoStr)
+	str = result.ToString()
+	assert.Equal(t, isoStr, str)
+
+	isoStr = "P1Y2M10DT2H30M"
+	result, _ = Parse(isoStr)
+	str = result.ToString()
+	assert.Equal(t, isoStr, str)
+}

@@ -1,18 +1,25 @@
 package iso8601
 
 import (
+	"bytes"
 	"errors"
 	"fmt"
 	"github.com/jucardi/go-streams/streams"
 	"github.com/jucardi/go-strings"
+	"html/template"
 	"strconv"
 	"time"
 	"unicode"
 )
 
+const (
+	valueNotFound        = "attempting to assign %s but no value found"
+	periodTemplateString = `P{{if .Years}}{{.Years}}Y{{end}}{{if .Months}}{{.Months}}M{{end}}{{if .Weeks}}{{.Weeks}}W{{end}}{{if .Days}}{{.Days}}D{{end}}{{if .HasTime}}T{{end }}{{if .Hours}}{{.Hours}}H{{end}}{{if .Minutes}}{{.Minutes}}M{{end}}{{if .Seconds}}{{.Seconds}}S{{end}}`
+)
+
 var (
-	valueNotFound = "attempting to assign %s but no value found"
-	values        = []rune{'Y', 'M', 'W', 'D', 'H', 'M', 'S'}
+	values            = []rune{'Y', 'M', 'W', 'D', 'H', 'M', 'S'}
+	periodTemplate, _ = template.New("period").Parse(periodTemplateString)
 )
 
 // Interval represents the interval structure defined in the ISO8601
@@ -111,4 +118,16 @@ func (p *Period) Normalize() *Period {
 func (p *Period) ToDuration() time.Duration {
 	days := p.Years*365 + p.Months*30 + p.Days
 	return time.Duration(days*24+p.Hours)*time.Hour + time.Duration(p.Minutes)*time.Minute + time.Duration(p.Seconds)*time.Second
+}
+
+// HasTime indicates whether the `Period` has a time component.
+func (p *Period) HasTime() bool {
+	return p.Hours > 0 || p.Minutes > 0 || p.Seconds > 0
+}
+
+// ToString converts the `Period` representation to a ISO8601 string,
+func (p *Period) ToString() string {
+	buf := new(bytes.Buffer)
+	periodTemplate.Execute(buf, p)
+	return buf.String()
 }
