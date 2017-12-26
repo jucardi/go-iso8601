@@ -4,12 +4,13 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
-	"github.com/jucardi/go-streams/streams"
-	"github.com/jucardi/go-strings"
 	"html/template"
 	"strconv"
 	"time"
 	"unicode"
+
+	"github.com/jucardi/go-streams/streams"
+	"github.com/jucardi/go-strings"
 )
 
 const (
@@ -130,4 +131,11 @@ func (p *Period) ToString() string {
 	buf := new(bytes.Buffer)
 	periodTemplate.Execute(buf, p)
 	return buf.String()
+}
+
+// Apply period to timestamp and return result.
+func (p *Period) Apply(t time.Time) time.Time {
+	y, m, d, h, M, s, n := t.Year(), t.Month(), t.Day(), t.Hour(), t.Minute(), t.Second(), t.Nanosecond()
+	duration := time.Hour*time.Duration(p.Hours) + time.Minute*time.Duration(p.Minutes) + time.Second*time.Duration(p.Seconds)
+	return time.Date(p.Years+y, time.Month(p.Months)+m, p.Days+d, h, M, s, n, t.Location()).Add(duration)
 }
