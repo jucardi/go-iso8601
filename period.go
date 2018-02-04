@@ -4,13 +4,12 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
+	"git.ten-x.io/go/go-foundation/utils/stringx"
+	"github.com/jucardi/go-streams/streams"
 	"html/template"
 	"strconv"
 	"time"
 	"unicode"
-
-	"github.com/jucardi/go-streams/streams"
-	"github.com/jucardi/go-strings"
 )
 
 const (
