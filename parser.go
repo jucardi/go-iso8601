@@ -84,6 +84,7 @@ func Parse(expression string) (*IntervalDescriptor, error) {
 	return ret, nil
 }
 
+// ToString returns a string representation of the interval descriptor
 func (i *IntervalDescriptor) ToString() string {
 	buf := new(bytes.Buffer)
 	iso8601Template.Execute(buf, i)
@@ -100,6 +101,7 @@ func (i *IntervalDescriptor) ToString() string {
 	return strings.Replace(str, "//", "/", -1)
 }
 
+// GetStartString returns a string representation of the start timestamp
 func (i *IntervalDescriptor) GetStartString() string {
 	zero := time.Time{}
 	if i.Start == zero {
@@ -108,6 +110,7 @@ func (i *IntervalDescriptor) GetStartString() string {
 	return i.Start.Format(time.RFC3339)
 }
 
+// GetEndString returns a string representation of the end timestamp
 func (i *IntervalDescriptor) GetEndString() string {
 	zero := time.Time{}
 	if i.End == zero {
@@ -116,6 +119,7 @@ func (i *IntervalDescriptor) GetEndString() string {
 	return i.End.Format(time.RFC3339)
 }
 
+// GetPeriodString returns a string representation of the period descriptor
 func (i *IntervalDescriptor) GetPeriodString() string {
 	return i.Period.ToString()
 }

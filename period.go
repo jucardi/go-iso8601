@@ -4,12 +4,13 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
-	"git.ten-x.io/go/go-foundation/utils/stringx"
-	"github.com/jucardi/go-streams/streams"
 	"html/template"
 	"strconv"
 	"time"
 	"unicode"
+
+	"github.com/jucardi/go-streams/streams"
+	"github.com/jucardi/go-strings/stringx"
 )
 
 const (
@@ -22,7 +23,7 @@ var (
 	periodTemplate, _ = template.New("period").Parse(periodTemplateString)
 )
 
-// Interval represents the interval structure defined in the ISO8601
+// Period represents the interval structure defined in the ISO8601
 type Period struct {
 	Years   int `json:"years" bson:"years"`
 	Months  int `json:"months" bson:"months"`
