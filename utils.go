@@ -2,9 +2,10 @@ package iso8601
 
 import (
 	"fmt"
-	"github.com/jucardi/go-strings/stringx"
 	"strconv"
 	"time"
+
+	"gopkg.in/jucardi/go-strings.v1/stringx"
 )
 
 var (
@@ -90,7 +91,7 @@ func TimeToString(timestamp time.Time, format string, monthsMap ...map[time.Mont
 			}(), -1).
 		S()
 
-	return ret;
+	return ret
 }
 
 func GetMonthString(month time.Month, shortMode bool, monthsMap ...map[time.Month]string) string {

@@ -1,9 +1,10 @@
 package iso8601
 
 import (
-	"github.com/stretchr/testify/assert"
 	"testing"
 	"time"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestPeriod_FromString(t *testing.T) {

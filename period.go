@@ -9,8 +9,8 @@ import (
 	"time"
 	"unicode"
 
-	"github.com/jucardi/go-streams/streams"
-	"github.com/jucardi/go-strings/stringx"
+	"gopkg.in/jucardi/go-streams.v1/streams"
+	"gopkg.in/jucardi/go-strings.v1/stringx"
 )
 
 const (
