@@ -40,6 +40,10 @@ var (
 	}
 )
 
+func TimeToIsoUtc(timestamp time.Time) string {
+	return TimeToString(timestamp.UTC(), "yyyy-MM-ddTHH:mm:ssZ")
+}
+
 func TimeToString(timestamp time.Time, format string, monthsMap ...map[time.Month]string) string {
 	// Converts the value of the current Date object to its equivalent string representation using the specified format
 	// and the formatting conventions following the ISO 8601 standard.
