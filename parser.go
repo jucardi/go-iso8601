@@ -36,16 +36,20 @@ func Parse(expression string) (*IntervalDescriptor, error) {
 				return nil, errors.New("repetitions component must be at the beginning of the string")
 			}
 
-			r, err := strconv.Atoi(v[1:])
+			if len(v) == 1 && i == 0 {
+				ret.Repeats = -1
+			} else {
+				r, err := strconv.Atoi(v[1:])
 
-			if err != nil {
-				return nil, fmt.Errorf("unable to parse repetitions, %s", err.Error())
-			}
+				if  err != nil {
+					return nil, fmt.Errorf("unable to parse repetitions, %s", err.Error())
+				}
 
-			if r <= 0 {
-				return nil, errors.New("repeat value must be greater than zero")
+				if r <= 0 {
+					return nil, errors.New("repeat value must be greater than zero")
+				}
+				ret.Repeats = r
 			}
-			ret.Repeats = r
 			repeatsSet = true
 			continue
 		}

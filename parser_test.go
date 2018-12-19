@@ -47,6 +47,11 @@ func TestParseZeroRepetitions(t *testing.T) {
 	assert.Equal(t, "repeat value must be greater than zero", err.Error())
 }
 
+func TestParseUnboundRepetitions(t *testing.T) {
+	result, _ := Parse("R/2008-03-01T13:00:00Z")
+	assert.Equal(t, -1, result.Repeats)
+}
+
 func TestParseMultiplePeriods(t *testing.T) {
 	result, err := Parse("R1/2008-03-01T13:00:00Z/P1Y2M10DT2H30M/P1Y2M10DT2H30M")
 	assert.Nil(t, result)
