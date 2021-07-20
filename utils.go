@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"time"
 
-	"gopkg.in/jucardi/go-strings.v1/stringx"
+	"github.com/jucardi/go-strings/stringx"
 )
 
 var (

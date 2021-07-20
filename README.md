@@ -13,12 +13,6 @@ To keep up to date with the most recent version:
 go get github.com/jucardi/go-iso8601
 ```
 
-To get a specific version:
-
-```bash
-go get gopkg.in/jucardi/go-iso8601.v1
-```
-
 #### Usage
 
 ###### Parsing a string
